@@ -1,0 +1,21 @@
+DROP TABLE market;
+
+CREATE TABLE market(
+    market_no number(5) primary key not null,
+    id varchar2(30) not null,
+    store varchar2(30) not null,
+    keyword varchar2(50) not null,
+    location varchar2(30) not null,
+    cont varchar2(1000) not null,
+    image_yn varchar2(20) default 'No',
+    rating varchar2(5) default '0',
+    hit number default 0,
+    good number default 0,
+    reg_date date default sysdate,
+    up_date date default sysdate,
+    deleteYN varchar(5) default 'No',
+    
+    CONSTRAINT fk_id foreign key(id) references member (id)
+);
+
+CREATE SEQUENCE MARKET_SEQ START WITH 1 INCREMENT BY 1 MAXVALUE 9999 NOCYCLE NOCACHE;

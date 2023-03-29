@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gil.foodMarket.mapper.UploadFileMapper">
+	
+	<insert id="fileUpload" parameterType="uploadfileDTO">
+		INSERT INTO uploadfile(upload_no, groupId, groupType, originName, fileName, filePath, reg_Date)
+		values(UPLOAD_SEQ.NEXTVAL, #{groupId}, #{groupType}, #{originName}, #{fileName}, #{filePath}, sysdate)
+	</insert>
+	
+	<select id="fileList" resultType="uploadfileDTO">
+		SELECT * FROM uploadfile WHERE groupId = #{groupId}
+	</select>
+	
+	<update id="fileDelete">
+		UPDATE uploadfile SET deleteYN = 'Yes' WHERE groupId = #{groupId}
+	</update>
+	
+</mapper> 

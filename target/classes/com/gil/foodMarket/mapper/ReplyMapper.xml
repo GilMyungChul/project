@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gil.foodMarket.mapper.ReplyMapper">
+
+	<select id="replyList" resultType="replysDTO">
+		SELECT * FROM replys WHERE marketId = #{marketId} AND deleteYN = 'No'
+	</select>
+	
+	<insert id="replyAdd">
+		INSERT INTO replys(reply_no, userId, marketId, cont, reg_date) 
+		VALUES(replys_SEQ.nextVal, #{userId}, #{marketId}, #{cont}, sysdate)
+	</insert>
+	
+	<update id="replyDel">
+		UPDATE replys SET deleteYN = 'Yes' WHERE reply_no = #{reply_no}
+	</update>
+	
+	<update id="replyModi">
+		UPDATE replys SET cont = #{cont}, up_date = sysdate WHERE reply_no = #{reply_no}
+	</update>
+	
+	<select id="replyCount" resultType="Integer">
+		SELECT COUNT(*) FROM replys WHERE marketId = #{marketId} AND deleteYN = 'No'
+	</select>
+	
+</mapper> 

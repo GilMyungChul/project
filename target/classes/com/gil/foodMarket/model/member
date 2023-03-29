@@ -1,0 +1,17 @@
+DROP TABLE member;
+
+CREATE TABLE member(
+	member_no number(5) primary key not null,
+    id varchar2(30) unique not null,
+    pw varchar2(30) not null,
+    name varchar2(10) not null,
+    ph varchar2(30) not null,
+    lv varchar2(10) default 'B',
+    img varchar2(100) default '1',
+    delete_yn varchar2(10) default 'N',
+    staff varchar2(10) default 'N',
+    email varchar2(50) not null,
+    join_date Date default sysdate
+);
+
+CREATE SEQUENCE MEMBER_SEQ START WITH 1 INCREMENT BY 1 MAXVALUE 9999 NOCYCLE NOCACHE;

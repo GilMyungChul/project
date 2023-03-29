@@ -1,0 +1,17 @@
+DROP TABLE replys;
+
+CREATE TABLE replys(
+    reply_no number(5) primary key not null,
+    userId varchar2(30) not null,
+    marketId number(5) not null,
+    indent number(5) default 0,
+    cont varchar2(100),
+    deleteYN varchar2(5) default 'No',
+    reg_date Date default sysdate,
+    up_date Date default sysdate,
+    
+    CONSTRAINT marketId foreign key(marketId) references market (market_no),
+    CONSTRAINT userId foreign key(userId) references member (id)
+);
+
+CREATE SEQUENCE replys_SEQ START WITH 1 INCREMENT BY 1 MAXVALUE 9999 NOCYCLE NOCACHE;

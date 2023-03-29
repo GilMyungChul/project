@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gil.foodMarket.mapper.MemberMapper">
+	
+	<sql id="adminMemList">
+		<if test="searchSelect == 'id'">
+			WHERE id LIKE '%' || #{search} || '%'
+		</if>
+		<if test="searchSelect == 'name'">
+			WHERE name LIKE '%' || #{search} || '%'
+		</if>
+		<if test="searchSelect == 'lv'">
+			WHERE lv LIKE '%' || #{search} || '%'
+		</if>
+		<if test="searchSelect == 'deleteYN'">
+			WHERE deleteYN LIKE '%' || #{search} || '%'
+		</if>
+		<if test="searchSelect == 'staff'">
+			WHERE staff LIKE '%' || #{search} || '%'
+		</if>
+	</sql>
+	
+	<select id="memberTotal" resultType="Integer">
+		SELECT COUNT(*) FROM member
+		<include refid="adminMemList"></include>
+	</select>
+	
+	<select id="memberList" resultType="memberDTO">
+		SELECT * FROM (SELECT ROWNUM AS RNUM, A.* FROM (SELECT * FROM member <include refid="adminMemList"></include> ORDER BY member_no DESC) A 
+		WHERE <![CDATA[ROWNUM <= (${startIndex} + ${cntPerPage})]]>) WHERE <![CDATA[${startIndex} <= RNUM]]>
+	</select>
+	
+	<insert id="memberJoin" parameterType="memberDTO">
+		INSERT INTO member(member_no, id, pw, name, ph, email, join_date) 
+		VALUES(MEMBER_SEQ.NEXTVAL, #{id}, #{pw}, #{name}, #{ph}, #{email}, sysdate)
+	</insert>
+	
+	<select id="memberLogin" parameterType="memberDTO" resultType="memberDTO">
+		SELECT * FROM member WHERE id = #{id}
+	</select>
+	
+	<select id="joinIdCheck" resultType="Integer">
+		SELECT COUNT(*) FROM member WHERE id = #{id}
+	</select>
+	
+	<select id="findIdChk" parameterType="memberDTO" resultType="memberDTO">
+		SELECT * FROM member WHERE name = #{name} AND ph = #{ph}
+	</select>
+	
+	<update id="findPwChk" parameterType="memberDTO">
+		UPDATE member SET pw = #{pw} WHERE id = #{id}
+	</update>
+	
+	<update id="updatePw" parameterType="memberDTO">
+		UPDATE member SET pw = #{pw} WHERE id = #{id}
+	</update>
+	
+	<select id="memberDetail" resultType="memberDTO">
+		SELECT * FROM member WHERE id = #{id}
+	</select>
+	
+	<update id="memberDelete" parameterType="String">
+		UPDATE member SET deleteYN = 'Yes' WHERE id = #{id}
+	</update>
+	
+	<delete id="memberDeletes" parameterType="String">
+		DELETE FROM member WHERE id = #{id}
+	</delete>
+	
+	<update id="memberModify" parameterType="memberDTO">
+		UPDATE member SET name = #{name}, ph = #{ph}, email = #{email}, lv = #{lv} WHERE id = #{id}
+	</update>
+	
+	<sql id="levels">
+		<if test="count == 50">
+			SET lv = 'S'
+		</if>
+		<if test="count == 100">
+			SET lv = 'G'
+		</if>
+		<if test="count == 150">
+			SET lv = 'P'
+		</if>
+	</sql>
+	
+	<update id="levelUpdate">
+		UPDATE member <include refid="levels"></include> WHERE id = #{id}
+	</update>
+
+</mapper> 

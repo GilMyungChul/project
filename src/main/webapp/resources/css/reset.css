@@ -1,0 +1,5 @@
+html, body, p, div, section, input, select, strong, a, i, em, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5{margin:0;padding:0;line-height:16px;}
+a{color:#000;outline:none;text-decoration:none;}
+img{line-height:0;}
+input, select{outline:none;}
+ul, ol, li{list-style:none;}

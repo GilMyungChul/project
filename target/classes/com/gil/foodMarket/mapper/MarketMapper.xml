@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gil.foodMarket.mapper.MarketMapper">
+
+	<sql id="adminMarList">
+		<if test="searchSelect == 'id'">
+			WHERE id LIKE '%' || #{search} || '%'
+		</if>
+		<if test="searchSelect == 'store'">
+			WHERE store LIKE '%' || #{search} || '%'
+		</if>
+		<if test="searchSelect == 'keyword'">
+			WHERE keyword LIKE '%' || #{search} || '%'
+		</if>
+		<if test="searchSelect == 'location'">
+			WHERE location LIKE '%' || #{search} || '%'
+		</if>
+		<if test="searchSelect == 'cont'">
+			WHERE cont LIKE '%' || #{search} || '%'
+		</if>
+	</sql>
+	
+	<sql id="adminCheck">
+		<if test="adminChk == 'Y'.toString()">
+			SELECT * FROM (SELECT ROWNUM AS RNUM, A.* FROM (SELECT * FROM market <include refid="adminMarList"></include> ORDER BY reg_date DESC) A 
+			WHERE <![CDATA[ROWNUM <= (${startIndex} + ${cntPerPage})]]>) WHERE <![CDATA[${startIndex} <= RNUM]]>
+		</if>
+		<if test="adminChk == 'N'.toString()">
+			SELECT * FROM market WHERE deleteYN = 'No' ORDER BY reg_date DESC 
+		</if>
+	</sql>
+	
+	<select id="userAddTotal" resultType="Integer">
+		SELECT COUNT(*) FROM market WHERE id = #{id}
+	</select>
+	
+	<select id="marketTotal" resultType="Integer">
+		SELECT COUNT(*) FROM market
+	</select>
+	
+	<insert id="marketAdd" parameterType="marketDTO">
+		INSERT INTO market(market_no, id, store, keyword, location, cont, rating) 
+		values(#{market_no}, #{id}, #{store}, #{keyword}, #{location}, #{cont}, #{rating})
+	</insert>
+	
+	<select id="marketList" resultType="marketDTO">
+		<include refid="adminCheck"></include>
+	</select>
+	
+	<select id="marketDetail" resultType="marketDTO">
+		SELECT * FROM market WHERE market_no = #{market_no}
+	</select>
+	
+	<update id="hitAdd" parameterType="marketDTO">
+		UPDATE market SET hit = hit + 1 WHERE market_no = #{market_no}
+	</update>
+	
+	<update id="goodAdd">
+		UPDATE market SET good = good + 1 WHERE market_no = #{market_no}
+	</update>
+	
+	<update id="marketModify" parameterType="marketDTO">
+		UPDATE market 
+		SET store = #{store}, keyword = #{keyword}, location = #{location}, cont = #{cont}, rating = #{rating}, up_date = sysdate 
+		WHERE market_no = #{market_no}
+	</update>
+	
+	<update id="marketDelete">
+		UPDATE market SET deleteYN = 'Yes' WHERE market_no = #{market_no}
+	</update>
+	
+	<update id="marketReset">
+		UPDATE market SET deleteYN = 'No' WHERE market_no = #{market_no}
+	</update>
+	
+</mapper> 

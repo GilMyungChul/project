@@ -1,0 +1,16 @@
+DROP TABLE uploadFile;
+
+create table uploadFile(
+    upload_no number(5) primary key not null,
+    groupId number(5) not null,
+    groupType varchar2(30) not null,
+    originName varchar2(100) not null,
+    fileName varchar2(100) not null,
+    filePath varchar2(1000) not null,
+    deleteYN varchar2(10) default 'N',
+    regDate Date default sysdate,
+    
+    CONSTRAINT groupId foreign key(groupId) references market (market_no)
+);
+
+CREATE SEQUENCE UPLOAD_SEQ START WITH 1 INCREMENT BY 1 MAXVALUE 9999 NOCYCLE NOCACHE;
